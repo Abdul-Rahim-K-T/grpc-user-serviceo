@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "grpc-user-serviceo/pkg/grpc/user;user";
+
+service UserService {
+    rpc GetUser (UserIDRequest) returns (UserResponse);
+    rpc GetUsers (UserIDsRequest) returns (UsersResponse);
+    rpc SearchUsers (SearchRequest) returns (UsersResponse);
+}
+
+message User {
+    int64 id = 1;
+    string fname = 2;
+    string city = 3;
+    int64 phone = 4;
+    double height = 5;
+    bool married = 6;
+}
+
+message UserIDRequest {
+    int64 id = 1;
+}
+
+message UserIDsRequest{
+    repeated int64 ids =1;
+}
+
+message SearchRequest {
+    string city = 1;
+    int64 phone = 2;
+    bool married =3;
+}
+
+message UserResponse {
+    User user = 1;
+}
+
+message UsersResponse {
+    repeated User users =1;
+}
