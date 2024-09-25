@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image:  rahim653/grpc-user-service:latest
     ports:
       - "50051:50051"
     networks:

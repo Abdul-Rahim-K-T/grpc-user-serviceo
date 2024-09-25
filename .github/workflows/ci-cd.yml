@@ -15,6 +15,11 @@ jobs:
 
       - name: Set up Docker
         run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build Docker images
+        run: |
           docker-compose -f docker-compose.yml build  # Build the services defined in docker-compose.yml
 
       - name: Log in to Docker Hub
