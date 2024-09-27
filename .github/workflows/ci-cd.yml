@@ -57,30 +57,21 @@ jobs:
       - name: Verify decoded certificates
         run: |
           ls -l $HOME/.kube/
-          cat $HOME/.kube/client.crt
-          cat $HOME/.kube/client.key
-          cat $HOME/.kube/ca.crt
+          if [ -s $HOME/.kube/client.crt ]; then echo "Client cert present"; else echo "Client cert missing"; fi
+          if [ -s $HOME/.kube/client.key ]; then echo "Client key present"; else echo "Client key missing"; fi
+          if [ -s $HOME/.kube/ca.crt ]; then echo "CA cert present"; else echo "CA cert missing"; fi
 
       - name: Write KUBE_CONFIG_DATA to config file
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         run: echo "$KUBE_CONFIG_DATA" | base64 --decode > $HOME/.kube/config
 
-      - name: List k8s directory contents
-        run: ls -l k8s/
-
-      - name: Show deployment.yaml content
-        run: cat k8s/deployment.yaml
-
-      - name: Show service.yaml content
-        run: cat k8s/service.yaml
-
-      - name: Show ingress.yaml content
-        run: cat k8s/ingress.yaml
+      - name: Show Kubeconfig content
+        run: cat $HOME/.kube/config
 
       - name: Set kubectl context
         run: |
-          kubectl config set-context --current --namespace=grpc-user-service
+          kubectl config use-context <your-context-name>
 
       - name: Test kubectl connectivity
         env:
@@ -92,4 +83,3 @@ jobs:
           KUBECONFIG: $HOME/.kube/config
         run: |
           kubectl apply -f k8s/ --validate=false
-          
