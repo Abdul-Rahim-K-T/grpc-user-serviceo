@@ -82,6 +82,11 @@ jobs:
         run: |
           kubectl config set-context --current --namespace=grpc-user-service
 
+      - name: Test kubectl connectivity
+        env:
+          KUBECONFIG: $HOME/.kube/config
+        run: kubectl cluster-info
+
       - name: Deploy to Kubernetes
         env:
           KUBECONFIG: $HOME/.kube/config
