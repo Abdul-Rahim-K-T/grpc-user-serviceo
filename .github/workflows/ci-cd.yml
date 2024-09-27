@@ -45,16 +45,10 @@ jobs:
         with:
           version: 'latest'
 
-      - name: Create .kube directory
-        run: mkdir -p $HOME/.kube
-
-      - name: Decode and save Kubernetes certificates
-        run: |
-          echo "${{ secrets.BASE64_CLIENT_CERT }}" | base64 --decode > $HOME/.kube/client.crt
-          echo "${{ secrets.BASE64_CLIENT_KEY }}" | base64 --decode > $HOME/.kube/client.key
-          echo "${{ secrets.BASE64_CA_CERT }}" | base64 --decode > $HOME/.kube/ca.crt
-
+  
       - name: Configure kubectl
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         run: |
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 --decode > $HOME/.kube/config
           # Update the config file to use the local paths for certificates
