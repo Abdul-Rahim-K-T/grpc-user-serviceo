@@ -58,9 +58,9 @@ jobs:
         run: |
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 --decode > $HOME/.kube/config
           # Update the config file to use the local paths for certificates
-          sed -i 's|C:\\Users\\abdul\\.minikube\\profiles\\minikube\\client.crt|'"$HOME"'/'.kube/client.crt|g' $HOME/.kube/config
-          sed -i 's|C:\\Users\\abdul\\.minikube\\profiles\\minikube\\client.key|'"$HOME"'/'.kube/client.key|g' $HOME/.kube/config
-          sed -i 's|C:\\Users\\abdul\\.minikube\\ca.crt|'"$HOME"'/'.kube/ca.crt|g' $HOME/.kube/config
+          sed -i 's|C:\\Users\\abdul\\.minikube\\profiles\\minikube\\client.crt|'"$HOME/.kube/client.crt"'|g' $HOME/.kube/config
+          sed -i 's|C:\\Users\\abdul\\.minikube\\profiles\\minikube\\client.key|'"$HOME/.kube/client.key"'|g' $HOME/.kube/config
+          sed -i 's|C:\\Users\\abdul\\.minikube\\ca.crt|'"$HOME/.kube/ca.crt"'|g' $HOME/.kube/config
 
       - name: Deploy to Kubernetes
         env:
