@@ -76,12 +76,11 @@ jobs:
         run: cat k8s/service.yaml
 
       - name: Show ingress.yaml content
-        run: cat k8s/ingres.yaml
+        run: cat k8s/ingress.yaml
 
       - name: Deploy to Kubernetes
         env:
           KUBECONFIG: $HOME/.kube/config
         run: |
-          kubectl apply -f k8s/deployment.yaml
-          kubectl apply -f k8s/service.yaml
-          kubectl apply -f k8s/ingres.yaml
+          kubectl apply -f k8s/
+          
