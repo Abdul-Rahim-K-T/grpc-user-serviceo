@@ -66,6 +66,18 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         run: echo "$KUBE_CONFIG_DATA" | base64 --decode > $HOME/.kube/config
 
+      - name: List k8s directory contents
+        run: ls -l k8s/
+
+      - name: Show deployment.yaml content
+        run: cat k8s/deployment.yaml
+
+      - name: Show service.yaml content
+        run: cat k8s/service.yaml
+
+      - name: Show ingress.yaml content
+        run: cat k8s/ingress.yaml
+
       - name: Deploy to Kubernetes
         env:
           KUBECONFIG: $HOME/.kube/config
