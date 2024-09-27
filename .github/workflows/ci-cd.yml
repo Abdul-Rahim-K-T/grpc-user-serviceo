@@ -71,7 +71,7 @@ jobs:
 
       - name: Set kubectl context
         run: |
-          kubectl config use-context <your-context-name>
+          kubectl config use-context grpc-user-management
 
       - name: Test kubectl connectivity
         env:
