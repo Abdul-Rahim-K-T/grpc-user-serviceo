@@ -50,25 +50,22 @@ jobs:
 
       - name: Decode and save Kubernetes certificates
         run: |
-          mkdir -p $HOME/.kube
           echo "${{ secrets.BASE64_CLIENT_CERT }}" | base64 --decode > $HOME/.kube/client.crt
           echo "${{ secrets.BASE64_CLIENT_KEY }}" | base64 --decode > $HOME/.kube/client.key
           echo "${{ secrets.BASE64_CA_CERT }}" | base64 --decode > $HOME/.kube/ca.crt
 
       - name: Configure kubectl
         run: |
-          mkdir -p $HOME/.kube
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 --decode > $HOME/.kube/config
           # Update the config file to use the local paths for certificates
-          sed -i 's|C:\\Users\\abdul\\.minikube\\profiles\\minikube\\client.crt|'$HOME'/.kube/client.crt|g' $HOME/.kube/config
-          sed -i 's|C:\\Users\\abdul\\.minikube\\profiles\\minikube\\client.key|'$HOME'/.kube/client.key|g' $HOME/.kube/config
-          sed -i 's|C:\\Users\\abdul\\.minikube\\ca.crt|'$HOME'/.kube/ca.crt|g' $HOME/.kube/config
+          sed -i 's|C:\\Users\\abdul\\.minikube\\profiles\\minikube\\client.crt|'"$HOME"'/'.kube/client.crt|g' $HOME/.kube/config
+          sed -i 's|C:\\Users\\abdul\\.minikube\\profiles\\minikube\\client.key|'"$HOME"'/'.kube/client.key|g' $HOME/.kube/config
+          sed -i 's|C:\\Users\\abdul\\.minikube\\ca.crt|'"$HOME"'/'.kube/ca.crt|g' $HOME/.kube/config
 
       - name: Deploy to Kubernetes
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}  # Ensure you have your kubeconfig data stored in GitHub Secrets
         run: |
-          mkdir -p $HOME/.kube
           echo "$KUBE_CONFIG_DATA" | base64 --decode > $HOME/.kube/config 
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
