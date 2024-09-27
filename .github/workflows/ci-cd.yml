@@ -60,21 +60,16 @@ jobs:
           cat $HOME/.kube/client.crt
           cat $HOME/.kube/client.key
           cat $HOME/.kube/ca.crt
-          cat $HOME/.kube/config
 
-      - name: Configure kubectl
-        run: |
-          echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 --decode > $HOME/.kube/config
-          # Update the config file to use the local paths for certificates
-          sed -i 's|C:\\Users\\abdul\\.minikube\\profiles\\minikube\\client.crt|'"$HOME/.kube/client.crt"'|g' $HOME/.kube/config
-          sed -i 's|C:\\Users\\abdul\\.minikube\\profiles\\minikube\\client.key|'"$HOME/.kube/client.key"'|g' $HOME/.kube/config
-          sed -i 's|C:\\Users\\abdul\\.minikube\\ca.crt|'"$HOME/.kube/ca.crt"'|g' $HOME/.kube/config
+      - name: Write KUBE_CONFIG_DATA to config file
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        run: echo "$KUBE_CONFIG_DATA" | base64 --decode > $HOME/.kube/config
 
       - name: Deploy to Kubernetes
         env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}  # Ensure you have your kubeconfig data stored in GitHub Secrets
+          KUBECONFIG: $HOME/.kube/config
         run: |
-          echo "$KUBE_CONFIG_DATA" | base64 --decode > $HOME/.kube/config 
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
           kubectl apply -f k8s/ingress.yaml
